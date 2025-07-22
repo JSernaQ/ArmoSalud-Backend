@@ -9,7 +9,8 @@ class Server {
 
         this.path = {
             user: '/api/user',
-            sell: '/api/sell'
+            sell: '/api/sell',
+            product: '/api/product',
         }
 
         this.middlewares()
@@ -27,8 +28,9 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.path.user, require('../routes/user.route.js'));
-        this.app.use(this.path.sell, require('../routes/sell.route.js'));
+        this.app.use(this.path.user, require('../routes/user.routes.js'));
+        this.app.use(this.path.sell, require('../routes/sell.routes.js'));
+        this.app.use(this.path.product, require('../routes/product.routes.js'));
     }
 
     listen() {

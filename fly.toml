@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for armosalud-backend on 2025-07-21T22:13:11Z
+# fly.toml app configuration file generated for armosalud-backend on 2025-07-22T00:15:59Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,7 +9,7 @@ primary_region = 'bog'
 [build]
 
 [http_service]
-  internal_port = 3000
+  internal_port = 8080
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true

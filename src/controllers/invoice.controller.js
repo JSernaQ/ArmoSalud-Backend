@@ -14,9 +14,12 @@ const createNewInvoice = async (req, res) => {
         //Start a MONGO session to abort in case of error
         session.startTransaction();
 
-        const { items, totalAmount } = req.body;
+        const { items, seller, totalAmount } = req.body;
 
-        if (!items || items.length === 0 || !totalAmount) {
+        console.log(req);
+        
+
+        if (!items || items.length === 0 || !totalAmount || !seller) {
             return res.status(400).json({
                 ok: false,
                 msg: 'Los datos de la factura están incompletos.'
@@ -57,7 +60,7 @@ const createNewInvoice = async (req, res) => {
 
         }
 
-        const [newInvoice] = await Invoice.create([{ consecutive: nextConsecutive, items, totalAmount: totalAmount }], { session });
+        const [newInvoice] = await Invoice.create([{ consecutive: nextConsecutive, items, seller, totalAmount: totalAmount }], { session });
     
         //Commit the changes
         await session.commitTransaction()

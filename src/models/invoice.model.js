@@ -17,14 +17,19 @@ const invoiceSchema = new mongoose.Schema({
         enum: ['Completa', 'Cancelada'],
         default: 'Completa'
     },
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     items: [{
         product: {
-            type: mongoose.Schema.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
             required: true
         },
         presentation: {
-            type: mongoose.Schema.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Presentation',
             required: true
         },

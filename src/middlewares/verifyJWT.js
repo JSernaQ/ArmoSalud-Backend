@@ -14,8 +14,7 @@ const verifyToken = (req, res, next) => {
         }
 
         const decode = jwt.verify(header, process.env.JWTKEY)
-        console.log(decode);
-
+        
         next()
         
 

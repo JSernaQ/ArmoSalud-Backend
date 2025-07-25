@@ -80,7 +80,6 @@ const login = async (req, res) => {
         const { password: _, ...userSafe } = existUser._doc;
 
         const token = await generateToken(userSafe);
-        console.log('token', token);
         
         return res.status(200).json({
             ok: true,

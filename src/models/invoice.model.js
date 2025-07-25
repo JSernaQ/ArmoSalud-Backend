@@ -1,0 +1,52 @@
+const mongoose = require('mongoose');
+
+const invoiceSchema = new mongoose.Schema({
+    
+    consecutive: {
+        type: Number,
+        unique: true,
+        require: true,
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    status: {
+        type: String,
+        required: true,
+        enum: ['Completa', 'Cancelada'],
+        default: 'Completa'
+    },
+    items: [{
+        product: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Product',
+            required: true
+        },
+        presentation: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Presentation',
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true
+        },
+        unitPrice: {
+            type: Number,
+            required: true
+        },
+        total: {
+            type: Number,
+            required: true
+        }
+    }],
+    totalAmount: {
+        type: Number,
+        required: true
+    }
+
+});
+
+const Invoice = mongoose.model('Invoice', invoiceSchema);
+module.exports = { Invoice };

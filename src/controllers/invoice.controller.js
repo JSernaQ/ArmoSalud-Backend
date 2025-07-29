@@ -17,7 +17,7 @@ const createNewInvoice = async (req, res) => {
         const { items, seller, totalAmount } = req.body;
 
         console.log(req);
-        
+
 
         if (!items || items.length === 0 || !totalAmount || !seller) {
             return res.status(400).json({
@@ -61,7 +61,7 @@ const createNewInvoice = async (req, res) => {
         }
 
         const [newInvoice] = await Invoice.create([{ consecutive: nextConsecutive, items, seller, totalAmount: totalAmount }], { session });
-    
+
         //Commit the changes
         await session.commitTransaction()
 
@@ -201,8 +201,21 @@ const putCancelInvoice = async (req, res) => {
             });
         }
 
-        const newinvoice = await Invoice.findOneAndUpdate({ consecutive: consecutive }, { status: "Cancelada" });
-        
+        const newinvoice = await Invoice.findOneAndUpdate({ consecutive: consecutive }, { status: "Cancelada" })
+            .populate('items.product', 'name');
+
+        if (newinvoice.status === "Cancelada") {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Esta factura ya ha sido cancelada.'
+            })
+        }
+
+        for (let item of newinvoice.items) {
+            await Product.findByIdAndUpdate(item.product._id, { $inc: { stock: item.quantity } })
+        }
+
+
         if (!newinvoice) {
             return res.status(404).json({
                 ok: false,

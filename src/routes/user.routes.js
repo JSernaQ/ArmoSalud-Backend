@@ -8,13 +8,7 @@ const { verifyToken } = require('../middlewares/verifyJWT.js');
 const { isAdmin } = require('../middlewares/isAdmin.js');
 
 
-router.get('/', verifyToken, (req, res) => {
-  return res.status(200).json({
-    ok: true,
-  })
-})
-
-router.post('/register', isAdmin, registerNewUser);
+router.post('/register', verifyToken, isAdmin, registerNewUser);
 router.post('/login', login);
 
 module.exports = router;

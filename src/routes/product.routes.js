@@ -1,18 +1,19 @@
 const { Router } = require('express');
 const router = Router();
 
-const { 
+const { verifyToken } = require('../middlewares/verifyJWT');
+const { isAdmin } = require('../middlewares/isAdmin');
+
+const {
     getAllProducts,
     createNewProduct,
     getOneProduct
 } = require('../controllers/product.controlles');
 
-router.get('/', getAllProducts);
+router.get('/', verifyToken, getAllProducts);
 
-router.get('/:productId', getOneProduct);
+router.get('/:productId', verifyToken, getOneProduct);
 
-router.post(
-    '/create', createNewProduct
-);
+router.post('/create', verifyToken, isAdmin, createNewProduct);
 
 module.exports = router;

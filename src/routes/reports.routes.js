@@ -5,15 +5,10 @@ const {
     generateDailyReport,
     getDailyReport
 } = require('../controllers/reports.controller');
+const { verifyToken } = require('../middlewares/verifyJWT');
+const { isAdmin } = require('../middlewares/isAdmin');
 
-router.get('/', (req, res) => {
-    return res.status(200).json({
-        ok: true,
-        msg: 'Todo bien!'
-    })
-});
-
-router.get('/generate-daily-report', generateDailyReport);
-router.get('/daily-report', getDailyReport);
+router.get('/generate-daily-report', verifyToken, isAdmin, generateDailyReport);
+router.get('/daily-report', verifyToken, isAdmin, getDailyReport);
 
 module.exports = router;

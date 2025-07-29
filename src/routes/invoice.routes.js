@@ -13,8 +13,8 @@ const {
 } = require('../controllers/invoice.controller')
 
 router.post('/create', verifyToken, createNewInvoice);
-router.get('/consecutive/:consecutiveNumber', getOneInvoice);
-router.put('/cancel', putCancelInvoice);
+router.get('/consecutive/:consecutiveNumber', verifyToken, getOneInvoice);
+router.put('/cancel', verifyToken, isAdmin, putCancelInvoice);
 router.get('/date', verifyToken, getOneDayInvoices);
 router.get('/', verifyToken, getInvoices);
 

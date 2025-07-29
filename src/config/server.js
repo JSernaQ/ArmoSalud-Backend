@@ -11,6 +11,7 @@ class Server {
             user: '/api/user',
             invoice: '/api/invoice',
             product: '/api/product',
+            reports: '/api/reports'
         }
 
         this.middlewares()
@@ -31,6 +32,7 @@ class Server {
         this.app.use(this.path.user, require('../routes/user.routes.js'));
         this.app.use(this.path.invoice, require('../routes/invoice.routes.js'));
         this.app.use(this.path.product, require('../routes/product.routes.js'));
+        this.app.use(this.path.reports, require('../routes/reports.routes.js'));
     }
 
     listen() {

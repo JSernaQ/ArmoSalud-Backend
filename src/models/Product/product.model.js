@@ -17,6 +17,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    owner: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true
+    },
     stock: {
         type: Number,
         required: true,

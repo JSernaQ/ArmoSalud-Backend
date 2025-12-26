@@ -9,7 +9,7 @@ const presentationSchema = new mongoose.Schema({
     },
     type: {
         type: String, 
-        enum:['Und', 'Tableta', 'Caja'],
+        enum:['Unidad', 'Tableta', 'Caja'],
         required: true
     },
     equivalence: {

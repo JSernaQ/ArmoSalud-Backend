@@ -27,6 +27,11 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
+    minStock: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     presentations: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Presentation',

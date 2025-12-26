@@ -18,7 +18,7 @@ const isAdmin = (req, res, next) => {
         if (decode.rol == 'seller') {
             return res.status(401).json({
                 ok: false,
-                msg: 'Acceso no autorizado'
+                msg: 'Rol no autorizado'
             })
         }
 

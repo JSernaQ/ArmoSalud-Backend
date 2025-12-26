@@ -5,7 +5,7 @@ const verifyToken = (req, res, next) => {
     try {
 
         const header = req.headers.authorization;
-
+        
         if (!header) {
             return res.status(401).json({
                 ok: false,
@@ -19,7 +19,6 @@ const verifyToken = (req, res, next) => {
         
 
     } catch (error) {
-        console.error('Error de autenticación:', error);
         return res.status(401).json({
             ok: false,
             msg: 'Token inválido o expirado'

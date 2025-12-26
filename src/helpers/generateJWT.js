@@ -12,10 +12,10 @@ async function generateToken(user) {
             rol: user.rol   
         },
         process.env.JWTKEY,
-        { expiresIn: "1h" }
+        { expiresIn: "12h" }
     );
 
     return token;
 };
-
+5
 module.exports = { generateToken }

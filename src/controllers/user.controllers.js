@@ -96,9 +96,27 @@ const login = async (req, res) => {
         })
     }
 
+};
+
+const getUsers = async (req, res) => {
+    try {
+        const userList = await User.find({}, { email: 0, password: 0});
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario encontrados',
+            userList: userList
+        })
+    } catch (error) {
+        console.error('Error en el sistema', error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error en el sistema, comunicate con un desarrollador'
+        })
+    }
 }
 
 module.exports = {
     registerNewUser,
-    login
+    login,
+    getUsers
 }   

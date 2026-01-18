@@ -14,9 +14,8 @@ const createNewInvoice = async (req, res) => {
         //Start a MONGO session to abort in case of error
         session.startTransaction();
 
-        const { items, seller, totalAmount } = req.body;
+        const { items, seller, subTotal, totalAmount, discount, paymentMethod } = req.body;
 
-        console.log(req);
 
 
         if (!items || items.length === 0 || !totalAmount || !seller) {
@@ -27,14 +26,28 @@ const createNewInvoice = async (req, res) => {
         }
 
         //Get the next consecutive number for the invoice
-        const nextConsecutive = await getNextSequence('invoice', session);
+        const nextConsecutive = await getNextSequence('invoice');
+
+        let itemList = [];
+
+        console.log(JSON.stringify(items, null, 2));
+        
+        
 
         //Iterate over the items to reduce stock
         for (const item of items) {
 
-            const product = await Product.findById(item.product).session(session);
-            const presentation = await Presentation.findById(item.presentation);
+            itemList.push({
+                product: item.productId,
+                presentationId: item.presentationId,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                total: item.total
+            })
+            const product = await Product.findById(item.productId).session(session);
+            const presentation = await Presentation.findById(item.presentationId).session(session);
 
+            
             if (!product || !presentation) {
                 await session.abortTransaction();
                 return res.status(400).json({
@@ -44,9 +57,8 @@ const createNewInvoice = async (req, res) => {
             }
 
             const productId = product._id;
-
-            //The quantity of product sold is added to the type of presentation (Example: Und = 1und, Box = 10und)
             const stockSold = item.quantity * presentation.equivalence
+
 
             if (product.stock < stockSold) {
                 await session.abortTransaction();
@@ -56,13 +68,12 @@ const createNewInvoice = async (req, res) => {
                 });
             }
 
-            await Product.findByIdAndUpdate(productId, { $inc: { stock: -stockSold } }).session(session)
+            await Product.findByIdAndUpdate(productId, { $inc: { stock: -stockSold } }).session(session);
 
         }
 
-        const [newInvoice] = await Invoice.create([{ consecutive: nextConsecutive, items, seller, totalAmount: totalAmount }], { session });
-
-        //Commit the changes
+        const [newInvoice] = await Invoice.create([{ consecutive: nextConsecutive, seller, items: itemList, subTotal, totalAmount, discount, paymentMethod }], { session });
+        // Commit the changes
         await session.commitTransaction()
 
         return res.status(201).json({
@@ -75,7 +86,7 @@ const createNewInvoice = async (req, res) => {
 
         await session.abortTransaction();
 
-        console.error('Error interno al crear una nueva factura.', error.message);
+        console.error('Error interno al crear una nueva factura.', error);
 
         return res.status(500).json({
             ok: false,

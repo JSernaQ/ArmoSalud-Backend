@@ -28,7 +28,7 @@ const invoiceSchema = new mongoose.Schema({
             ref: 'Product',
             required: true
         },
-        presentation: {
+        presentationId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Presentation',
             required: true
@@ -46,8 +46,20 @@ const invoiceSchema = new mongoose.Schema({
             required: true
         }
     }],
+    subTotal: {
+        type: Number,
+        required: true
+    },
     totalAmount: {
         type: Number,
+        required: true
+    },
+    discount: {
+        type: Number,
+        default: 0
+    },
+    paymentMethod: {
+        type: String,
         required: true
     }
 

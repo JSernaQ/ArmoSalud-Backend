@@ -137,7 +137,7 @@ const getOneDayInvoices = async (req, res) => {
 
     try {
 
-        const { date } = req.body;
+        const { date } = req.params;
 
         if (!date) {
             return res.status(400).json({
@@ -156,7 +156,7 @@ const getOneDayInvoices = async (req, res) => {
         })
             .sort({ date: -1 })
             .populate('items.product', 'name')
-            .populate('items.presentation', 'type equivalence price');
+            .populate('items.presentationId', 'type equivalence price');
 
         return res.status(200).json({
             ok: true,
